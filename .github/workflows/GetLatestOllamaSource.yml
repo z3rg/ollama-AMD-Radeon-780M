@@ -1,0 +1,46 @@
+name: Sync with Upstream Ollama
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Jalan otomatis setiap jam 00:00 UTC (Pagi WIB)
+  workflow_dispatch:      # Tombol manual untuk trigger kapan saja
+
+jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Memberi izin script untuk push/write ke repo
+
+    steps:
+      # 1. Checkout repo Anda (z3rg)
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Mengambil seluruh history (penting untuk merge)
+          token: ${{ secrets.GITHUB_TOKEN }} # Menggunakan token bawaan
+
+      # 2. Setup Config Git (Supaya dianggap user valid)
+      - name: Configure Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+
+      # 3. Tambahkan Remote Upstream (Repo Asli Ollama)
+      - name: Add Upstream Remote
+        run: |
+          git remote add upstream https://github.com/ollama/ollama.git
+          git fetch upstream
+
+      # 4. Merge Perubahan
+      # Kita merge branch 'main' milik upstream ke branch 'main' milik kita
+      - name: Merge Upstream Changes
+        run: |
+          git checkout main
+          
+          # Coba merge. Jika ada konflik, langkah ini akan gagal (Error)
+          # Flag --no-edit agar tidak membuka text editor untuk commit message
+          git merge upstream/main --no-edit 
+
+      # 5. Push Hasil Merge ke Repo Anda
+      - name: Push changes
+        run: git push origin main
