@@ -23,6 +23,7 @@ jobs:
         id: goflags
         run: |
           git clone https://github.com/ollama/ollama.git
+          cd ollama
           echo GOFLAGS="'-ldflags=-w -s \"-X=github.com/ollama/ollama/version.Version=${GITHUB_REF_NAME#v}\" \"-X=github.com/ollama/ollama/server.mode=release\"'" | tee -a $GITHUB_OUTPUT
           echo VERSION="${GITHUB_REF_NAME#v}" | tee -a $GITHUB_OUTPUT
           echo vendorsha=$(make -f Makefile.sync print-base) | tee -a $GITHUB_OUTPUT
@@ -149,6 +150,7 @@ jobs:
       - name: Chekout Latest OllamaSetup
         run: |
           git clone https://github.com/ollama/ollama.git
+          cd ollama
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
@@ -193,6 +195,7 @@ jobs:
       - name: Chekout Latest OllamaSetup
         run: |
           git clone https://github.com/ollama/ollama.git
+          cd ollama
       - uses: google-github-actions/auth@v2
         with:
           project_id: ollama
@@ -251,6 +254,7 @@ jobs:
       - name: Chekout Latest OllamaSetup
         run: |
           git clone https://github.com/ollama/ollama.git
+          cd ollama
       - uses: actions/download-artifact@v4
         with:
           pattern: bundles-*
