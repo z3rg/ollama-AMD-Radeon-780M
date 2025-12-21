@@ -181,7 +181,7 @@ jobs:
         with:
           node-version: "20"
       - run: |
-          ${{ github.workspace }}\ollama\scripts\build_windows ollama app
+          ${{ github.workspace }}\ollama\scripts\build_windows.ps1
       - name: Log build results
         run: |
           gci -path .\ollama\dist -Recurse -File | ForEach-Object { get-filehash -path $_.FullName -Algorithm SHA256 } | format-list
