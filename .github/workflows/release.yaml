@@ -52,7 +52,8 @@ jobs:
       - name: Install system dependencies
         run: |
           choco install -y --no-progress ccache ninja
-          ccache -o cache_dir=${{ github.workspace }}\.ccache
+          mkdir ollama
+          ccache -o cache_dir=${{ github.workspace }}\ollama\.ccache
       - if: startsWith(matrix.preset, 'CUDA ') || startsWith(matrix.preset, 'ROCm ') || startsWith(matrix.preset, 'Vulkan')
         id: cache-install
         uses: actions/cache/restore@v4
@@ -106,10 +107,9 @@ jobs:
         run: |
           git clone https://github.com/ollama/ollama.git
           cd ollama
-          pwd
       - uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}\.ccache
+          path: ${{ github.workspace }}\ollama\.ccache
           key: ccache-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.preset }}-${{ needs.setup-environment.outputs.vendorsha }}
       - name: Build target "${{ matrix.preset }}"
         run: |
