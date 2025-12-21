@@ -125,11 +125,11 @@ jobs:
           CMAKE_GENERATOR: Ninja
       - name: Log build results
         run: |
-          gci -path .\dist -Recurse -File | ForEach-Object { get-filehash -path $_.FullName -Algorithm SHA256 } | format-list
+          gci -path .\ollama\dist -Recurse -File | ForEach-Object { get-filehash -path $_.FullName -Algorithm SHA256 } | format-list
       - uses: actions/upload-artifact@v4
         with:
           name: depends-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.preset }}
-          path: dist\*
+          path: ollama\dist\*
 
   windows-build:
     strategy:
