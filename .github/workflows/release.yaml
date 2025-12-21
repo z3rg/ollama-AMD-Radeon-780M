@@ -102,7 +102,10 @@ jobs:
             C:\Program Files\AMD\ROCm
             C:\VulkanSDK
           key: ${{ matrix.install }}
-      - uses: actions/checkout@v4
+      - name: Chekout Latest OllamaSetup
+        run: |
+          git clone https://github.com/ollama/ollama.git
+          cd ollama
       - uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}\.ccache
@@ -269,12 +272,12 @@ jobs:
         working-directory: dist
       - name: Create or update Release for tag
         run: |
-          RELEASE_VERSION="$(echo ${GITHUB_REF_NAME} | cut -f1 -d-)"
+          RELEASE_VERSION="$(echo $(git describe --tags "$(git rev-list --tags --max-count=1)") | cut -f1 -d-)"
           echo "Looking for existing release for ${RELEASE_VERSION}"
           OLD_TAG=$(gh release ls --json name,tagName | jq -r ".[] | select(.name == \"${RELEASE_VERSION}\") | .tagName")
           if [ -n "$OLD_TAG" ]; then
-            echo "Updating release ${RELEASE_VERSION} to point to new tag ${GITHUB_REF_NAME}"
-            gh release edit ${OLD_TAG} --tag ${GITHUB_REF_NAME}
+            echo "Updating release ${RELEASE_VERSION} to point to new tag $(git describe --tags "$(git rev-list --tags --max-count=1)")"
+            gh release edit ${OLD_TAG} --tag $(git describe --tags "$(git rev-list --tags --max-count=1)")
           else
             echo "Creating new release ${RELEASE_VERSION} pointing to tag ${GITHUB_REF_NAME}"
             gh release create ${GITHUB_REF_NAME} \
