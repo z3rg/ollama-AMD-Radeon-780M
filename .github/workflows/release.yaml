@@ -162,10 +162,12 @@ jobs:
         with:
           go-version-file: go.mod
           cache-dependency-path: |
+            cd ollama
             go.sum
             Makefile.sync
       - name: Verify gcc is actually clang
         run: |
+          cd ollama
           $ErrorActionPreference='Continue'
           $version=& gcc -v 2>&1
           $version=$version -join "`n"
@@ -188,7 +190,7 @@ jobs:
         with:
           name: build-${{ matrix.os }}-${{ matrix.arch }}
           path: |
-            dist\*
+            ollama\dist\*
 
   windows-app:
     runs-on: windows-2022
@@ -221,6 +223,7 @@ jobs:
         with:
           go-version-file: go.mod
           cache-dependency-path: |
+            cd ollama
             go.sum
             Makefile.sync
       - uses: actions/download-artifact@v4
@@ -245,8 +248,8 @@ jobs:
         with:
           name: bundles-windows
           path: |
-            dist/*.zip
-            dist/OllamaSetup.exe
+            ollama/dist/*.zip
+            ollama/dist/OllamaSetup.exe
 
   # Final release process
   release:
