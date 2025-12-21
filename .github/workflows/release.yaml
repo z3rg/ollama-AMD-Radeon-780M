@@ -162,12 +162,10 @@ jobs:
         with:
           go-version-file: go.mod
           cache-dependency-path: |
-            cd ollama
-            go.sum
-            Makefile.sync
+            ollama/go.sum
+            ollama/Makefile.sync
       - name: Verify gcc is actually clang
         run: |
-          cd ollama
           $ErrorActionPreference='Continue'
           $version=& gcc -v 2>&1
           $version=$version -join "`n"
@@ -182,7 +180,7 @@ jobs:
         with:
           node-version: "20"
       - run: |
-          ./scripts/build_windows ollama app
+          ./ollama/scripts/build_windows ollama app
       - name: Log build results
         run: |
           gci -path .\dist -Recurse -File | ForEach-Object { get-filehash -path $_.FullName -Algorithm SHA256 } | format-list
