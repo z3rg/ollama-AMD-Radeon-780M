@@ -44,7 +44,7 @@ jobs:
             rocm-version: '6.4'
             flags: '-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_FLAGS="-parallel-jobs=4 -Wno-ignored-attributes -Wno-deprecated-pragma" -DCMAKE_CXX_FLAGS="-parallel-jobs=4 -Wno-ignored-attributes -Wno-deprecated-pragma"'
             runner_dir: 'rocm'
-    runs-on: ${{ matrix.arch == 'arm64' && format('{0}-{1}', matrix.os, matrix.arch) || matrix.os }}
+    runs-on: windows-2022
     environment: release
     env:
       GOFLAGS: ${{ needs.setup-environment.outputs.GOFLAGS }}
@@ -134,8 +134,7 @@ jobs:
         - os: windows
           arch: amd64
           llvmarch: x86_64
-    runs-on: ${{ matrix.arch == 'arm64' && format('{0}-{1}', matrix.os, matrix.arch) || matrix.os }}
-    environment: release
+    runs-on: windows-2022
     needs: [setup-environment]
     env:
       GOFLAGS: ${{ needs.setup-environment.outputs.GOFLAGS }}
@@ -186,7 +185,7 @@ jobs:
             dist\*
 
   windows-app:
-    runs-on: windows
+    runs-on: windows-2022
     environment: release
     needs: [windows-build, windows-depends]
     env:
