@@ -161,7 +161,7 @@ jobs:
           pwd
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: ${{ github.workspace }}\ollama\go.mod
           cache-dependency-path: |
             ${{ github.workspace }}\ollama\go.sum
             ${{ github.workspace }}\ollama\Makefile.sync
