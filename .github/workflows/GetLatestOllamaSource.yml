@@ -1,8 +1,6 @@
 name: Sync with Upstream Ollama
 
 on:
-  schedule:
-    - cron: '0 0 * * *'  # Jalan otomatis setiap jam 00:00 UTC (Pagi WIB)
   workflow_dispatch:      # Tombol manual untuk trigger kapan saja
 
 jobs:
